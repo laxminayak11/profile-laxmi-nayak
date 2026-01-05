@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Laxmi Nayak | Frontend Developer Portfolio</title>
+  <!-- Font Awesome for Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <style>
+    /* Root Variables for Themes */
+    :root {
+      --bg-gradient: linear-gradient(135deg, #fff0f8 0%, #ffffff 70%);
+      --text-color: #444;
+      --card-bg: white;
+      --accent: #ff69b4;
+      --accent-hover: #ff1493;
+      --shadow: rgba(255, 182, 193, 0.15);
+      --header-bg: rgba(255, 255, 255, 0.95);
+      --skill-bg: #fff0f8;
+      --skill-bar-bg: #ffe4f0;
+    }
+
+    [data-theme="dark"] {
+      --bg-gradient: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+      --text-color: #e2e8f0;
+      --card-bg: #1e293b;
+      --accent: #00bfff;
+      --accent-hover: #0099cc;
+      --shadow: rgba(0, 191, 255, 0.2);
+      --header-bg: rgba(15, 23, 42, 0.95);
+      --skill-bg: #334155;
+      --skill-bar-bg: #475569;
+    }
+
+    /* Reset & Base */
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: var(--bg-gradient);
+      color: var(--text-color);
+      line-height: 1.7;
+      transition: background 0.5s ease, color 0.5s ease;
+    }
+    .container { 
+      max-width: 1200px; 
+      margin: 0 auto; 
+      padding: 0 20px; 
+    }
+
+    /* Header */
+    header {
+      background: var(--header-bg);
+      backdrop-filter: blur(10px);
+      box-shadow: 0 2px 15px var(--shadow);
+      position: fixed;
+      width: 100%;
+      top: 0;
+      z-index: 1000;
+      padding: 15px 0;
+    }
+    .header-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+    .logo img {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 4px solid var(--accent);
+    }
+    .logo h1 {
+      font-size: 1.8rem;
+      color: var(--accent);
+    }
+    nav ul {
+      display: flex;
+      list-style: none;
+      gap: 30px;
+      align-items: center;
+    }
+    nav a {
+      text-decoration: none;
+      color: var(--text-color);
+      font-weight: 600;
+      padding: 8px 0;
+      position: relative;
+      transition: color 0.3s;
+    }
+    nav a::after {
+      content: '';
+      position: absolute;
+      width: 0;
+      height: 3px;
+      bottom: 0;
+      left: 0;
+      background: var(--accent);
+      transition: width 0.3s;
+    }
+    nav a:hover {
+      color: var(--accent);
+    }
+    nav a:hover::after {
+      width: 100%;
+    }
+
+    /* Theme Toggle Button */
+    .theme-toggle {
+      background: var(--card-bg);
+      border: 2px solid var(--accent);
+      color: var(--accent);
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 1.3rem;
+      transition: all 0.4s;
+    }
+    .theme-toggle:hover {
+      background: var(--accent);
+      color: white;
+      transform: rotate(30deg);
+    }
+
+    /* Hero */
+    .hero {
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      background: linear-gradient(rgba(0,0,0,0.05), rgba(0,0,0,0.1)), 
+                  url('https://via.placeholder.com/1920x1080?text=Soft+Background') center/cover;
+      color: var(--text-color);
+      position: relative;
+    }
+    .hero h2 {
+      font-size: 4.5rem;
+      margin-bottom: 10px;
+    }
+    .hero span {
+      color: var(--accent);
+    }
+    .hero p {
+      font-size: 1.6rem;
+      margin: 20px 0;
+    }
+    .hero button {
+      padding: 14px 36px;
+      background: var(--accent);
+      color: white;
+      border: none;
+      border-radius: 50px;
+      cursor: pointer;
+      font-size: 1.2rem;
+      transition: all 0.4s;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.2);
+    }
+    .hero button:hover {
+      background: var(--accent-hover);
+      transform: translateY(-5px);
+    }
+
+    /* Cards */
+    .card {
+      background: var(--card-bg);
+      padding: 45px;
+      margin: 50px 0;
+      border-radius: 20px;
+      box-shadow: 0 15px 35px var(--shadow);
+      opacity: 0;
+      transform: translateY(50px);
+      transition: all 0.8s ease;
+    }
+    .card.visible { opacity: 1; transform: translateY(0); }
+
+    /* About with Profile Pic */
+    .about-content {
+      display: flex;
+      align-items: center;
+      gap: 40px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    .about-text {
+      flex: 1;
+      min-width: 300px;
+    }
+    .about-img {
+      text-align: center;
+    }
+    .about-img img {
+      width: 280px;
+      height: 280px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 8px solid var(--accent);
+      box-shadow: 0 10px 30px var(--shadow);
+    }
+
+    /* Skills */
+    .skills-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 25px;
+      margin-top: 30px;
+    }
+    .skill-item {
+      background: var(--skill-bg);
+      padding: 20px;
+      border-radius: 15px;
+      text-align: center;
+      transition: transform 0.3s;
+    }
+    .skill-item:hover {
+      transform: translateY(-8px);
+    }
+    .skill-bar {
+      height: 12px;
+      background: var(--skill-bar-bg);
+      border-radius: 6px;
+      margin-top: 10px;
+      overflow: hidden;
+    }
+    .skill-progress {
+      height: 100%;
+      background: linear-gradient(90deg, var(--accent), var(--accent-hover));
+      width: 0;
+      transition: width 1.8s ease;
+    }
+
+    /* Projects */
+    .projects-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 35px;
+      margin-top: 40px;
+    }
+    .project-card {
+      background: var(--card-bg);
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: 0 10px 30px var(--shadow);
+      transition: all 0.4s ease;
+    }
+    .project-card:hover {
+      transform: translateY(-15px);
+    }
+    .project-card img {
+      width: 100%;
+      height: 220px;
+      object-fit: cover;
+      transition: transform 0.5s;
+    }
+    .project-card:hover img {
+      transform: scale(1.1);
+    }
+    .project-info {
+      padding: 25px;
+      text-align: center;
+    }
+    .project-info h3 {
+      color: var(--accent);
+      margin-bottom: 10px;
+    }
+    .github-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      margin-top: 15px;
+      padding: 12px 24px;
+      background: var(--accent);
+      color: white;
+      text-decoration: none;
+      border-radius: 50px;
+      font-weight: 600;
+      transition: all 0.3s;
+    }
+    .github-btn:hover {
+      background: var(--accent-hover);
+      transform: translateY(-3px);
+    }
+
+    /* Contact */
+    #contact {
+      background: linear-gradient(135deg, var(--accent), var(--accent-hover));
+      color: white;
+      text-align: center;
+      border-radius: 20px;
+    }
+    .contact-details {
+      display: flex;
+      flex-direction: column;
+      gap: 25px;
+      max-width: 500px;
+      margin: 40px auto;
+      font-size: 1.3rem;
+    }
+    .contact-item {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 20px;
+      padding: 18px;
+      background: rgba(255, 255, 255, 0.15);
+      border-radius: 15px;
+      transition: all 0.3s;
+    }
+    .contact-item:hover {
+      background: rgba(255, 255, 255, 0.25);
+      transform: scale(1.05);
+    }
+    .contact-item i {
+      font-size: 2rem;
+    }
+    .contact-item a {
+      color: white;
+      text-decoration: none;
+    }
+
+    /* Footer */
+    footer {
+      text-align: center;
+      padding: 40px;
+      background: var(--accent);
+      color: white;
+      margin-top: 60px;
+    }
+
+    @media (max-width: 768px) {
+      .header-inner { flex-direction: column; gap: 20px; }
+      nav ul { flex-wrap: wrap; justify-content: center; gap: 15px; }
+      .about-content { flex-direction: column; text-align: center; }
+      .hero h2 { font-size: 3rem; }
+    }
+  </style>
+</head>
+<body data-theme="light">
+
+<header>
+  <div class="header-inner container">
+    <div class="logo">
+      <h1>Laxmi Nayak</h1>
+    </div>
+    <nav>
+      <ul>
+        <li><a href="#hero">Home</a></li>
+        <li><a href="#about">About</a></li>
+        <li><a href="#skills">Skills</a></li>
+        <li><a href="#projects">Projects</a></li>
+        <li><a href="#contact">Contact</a></li>
+        <li>
+          <div class="theme-toggle" onclick="toggleTheme()" title="Toggle Theme">
+            <i class="fas fa-moon"></i>
+          </div>
+        </li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<section class="hero" id="hero">
+  <h2>Hello, I’m <span>Laxmi</span></h2>
+  <p>Web Development Student | Frontend Enthusiast</p>
+  <button onclick="scrollToSection('#about')">Explore More</button>
+</section>
+
+<main class="container">
+
+  <!-- ABOUT -->
+<section class="card" id="about">
+  <h2>About Me</h2>
+  <div class="about-content">
+    <div class="about-img">
+      <img src="profile.jpg" alt="Laxmi Nayak">
+    </div>
+    <div class="about-text">
+      <p>Hello! I’m <strong>Laxmi Nayak</strong>, a dedicated and passionate Web Development student with a deep love for frontend technologies. I find immense joy in transforming creative ideas into stunning, interactive, and seamless digital experiences. For me, building websites isn’t just coding—it’s an art form where design meets functionality to create something meaningful and user-centric.</p>
+      
+      <br>
+      
+      <p>Currently pursuing my studies in web development, I’m constantly sharpening my skills in <strong>HTML</strong>, <strong>CSS</strong>, <strong>JavaScript</strong>, and <strong>C programming</strong>. I enjoy exploring modern frontend practices like responsive design, clean UI/UX principles, and writing efficient, readable code. Whether it's crafting pixel-perfect layouts, adding smooth animations, or making websites work flawlessly across devices, I’m always excited to learn and implement the latest techniques.</p>
+      
+      <br>
+      
+      <p>My journey into web development began with curiosity and has grown into a true passion. I thrive on solving problems, experimenting with new tools, and seeing how small lines of code can bring big ideas to life. My long-term goal is to become a professional <strong>Frontend Developer</strong>, contributing to innovative projects that make a positive impact—whether for businesses, communities, or users around the world.</p>
+      
+      <br>
+      
+      <p>When I’m not coding, you’ll find me exploring design inspirations, learning new frameworks, or working on personal projects to push my limits. I believe in continuous growth, attention to detail, and building things that not only work well but also feel delightful to use.</p>
+      
+      <br>
+      
+      <p>Thank you for visiting my portfolio! I’m always open to learning, collaborating, and connecting with like-minded people. Let’s build something amazing together! 💻✨</p>
+    </div>
+  </div>
+</section>
+
+  <!-- SKILLS -->
+  <section class="card" id="skills">
+    <h2>Skills</h2>
+    <div class="skills-grid">
+      <div class="skill-item">
+        <div style="display: flex; justify-content: space-between;"><span>HTML</span><span>90%</span></div>
+        <div class="skill-bar"><div class="skill-progress" style="width: 90%;"></div></div>
+      </div>
+      <div class="skill-item">
+        <div style="display: flex; justify-content: space-between;"><span>CSS</span><span>85%</span></div>
+        <div class="skill-bar"><div class="skill-progress" style="width: 85%;"></div></div>
+      </div>
+      <div class="skill-item">
+        <div style="display: flex; justify-content: space-between;"><span>JavaScript</span><span>70%</span></div>
+        <div class="skill-bar"><div class="skill-progress" style="width: 70%;"></div></div>
+      </div>
+      <div class="skill-item">
+        <div style="display: flex; justify-content: space-between;"><span>C Language</span><span>75%</span></div>
+        <div class="skill-bar"><div class="skill-progress" style="width: 75%;"></div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROJECTS -->
+  <section class="card" id="projects">
+    <h2>Projects</h2>
+    <div class="projects-grid">
+      <div class="project-card">
+        <img src="https://via.placeholder.com/600x400?text=Online+Quiz+App" alt="Online Quiz App">
+        <div class="project-info">
+          <h3>Online Quiz App</h3>
+          <p>An interactive multiple-choice quiz with timer and score tracking.</p>
+          <a href="https://github.com/laxminayak11" target="_blank" class="github-btn">
+            <i class="fab fa-github"></i> View on GitHub
+          </a>
+        </div>
+      </div>
+      <div class="project-card">
+        <img src="https://via.placeholder.com/600x400?text=Student+Result+System" alt="Student Result System">
+        <div class="project-info">
+          <h3>Student Result System</h3>
+          <p>Manages and displays student grades and results dynamically.</p>
+          <a href="https://github.com/laxminayak11" target="_blank" class="github-btn">
+            <i class="fab fa-github"></i> View on GitHub
+          </a>
+        </div>
+      </div>
+      <div class="project-card">
+        <img src="https://via.placeholder.com/600x400?text=Portfolio+Website" alt="Portfolio">
+        <div class="project-info">
+          <h3>Personal Portfolio</h3>
+          <p>A responsive portfolio to showcase skills and projects (this site!).</p>
+          <a href="https://github.com/laxminayak11" target="_blank" class="github-btn">
+            <i class="fab fa-github"></i> View on GitHub
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section class="card" id="contact">
+    <h2>Contact Me</h2>
+    <p>Feel free to reach out through any of the channels below!</p>
+    <div class="contact-details">
+      <div class="contact-item">
+        <i class="fas fa-envelope"></i>
+        <a href="mailto:laxmi.nayak@rungta.org">laxmi.nayak@rungta.org</a>
+      </div>
+      <div class="contact-item">
+        <i class="fas fa-phone"></i>
+        <span>+91 8450005601</span>
+      </div>
+      <div class="contact-item">
+        <i class="fas fa-map-marker-alt"></i>
+        <span>Raipur, Chhattisgarh, India</span>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <p>&copy; 2026 Laxmi Nayak. All rights reserved. Made with 💕</p>
+</footer>
+
+<script>
+  // Smooth scroll
+  function scrollToSection(section) {
+    document.querySelector(section).scrollIntoView({ behavior: 'smooth' });
+  }
+  document.querySelectorAll('nav a').forEach(link => {
+    link.addEventListener('click', e => {
+      e.preventDefault();
+      scrollToSection(link.getAttribute('href'));
+    });
+  });
+
+  // Fade in cards
+  const cards = document.querySelectorAll('.card');
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) entry.target.classList.add('visible');
+    });
+  }, { threshold: 0.1 });
+  cards.forEach(card => observer.observe(card));
+
+  // Theme Toggle
+  function toggleTheme() {
+    const body = document.body;
+    const toggleIcon = document.querySelector('.theme-toggle i');
+    
+    if (body.getAttribute('data-theme') === 'light') {
+      body.setAttribute('data-theme', 'dark');
+      toggleIcon.classList.replace('fa-moon', 'fa-sun');
+      localStorage.setItem('theme', 'dark');
+    } else {
+      body.setAttribute('data-theme', 'light');
+      toggleIcon.classList.replace('fa-sun', 'fa-moon');
+      localStorage.setItem('theme', 'light');
+    }
+  }
+
+  // Load saved theme
+  window.onload = () => {
+    const savedTheme = localStorage.getItem('theme') || 'light';
+    document.body.setAttribute('data-theme', savedTheme);
+    const toggleIcon = document.querySelector('.theme-toggle i');
+    if (savedTheme === 'dark') {
+      toggleIcon.classList.replace('fa-moon', 'fa-sun');
+    }
+  };
+</script>
+</body>
+</html>
